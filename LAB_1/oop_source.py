@@ -82,7 +82,11 @@ class NotDirectedGraph(Graph):
     def __enter_number(self):  # Enter and check number
         answer = 0
         while answer > 5 or answer < 1:
-            answer = int(input("Type your choice : "))
+            answer = input("Type your choice : ")
+            if answer.isdigit():
+                answer = int(answer)
+            else:
+                answer = 0
             if answer > 5 or answer < 1:
                 print("Invalid input!")
         return answer
@@ -100,7 +104,7 @@ class NotDirectedGraph(Graph):
             if hanging_vertices:
                 print("Hanging vertices :", *hanging_vertices)
             else:
-                print("Graph does not have handle vertices!")
+                print("Graph does not have hanging vertices!")
             if isolated_vertices:
                 print("Isolated vertices :", *isolated_vertices)
             else:
@@ -168,7 +172,11 @@ class DirectedGraph(Graph):
     def __enter_number(self):  # Enter and check number
         answer = 0
         while answer > 3 or answer < 1:
-            answer = int(input("Type your choice : "))
+            answer = input("Type your choice : ")
+            if answer.isdigit():
+                answer = int(answer)
+            else:
+                answer = 0
             if answer > 3 or answer < 1:
                 print("Invalid input!")
         return answer
