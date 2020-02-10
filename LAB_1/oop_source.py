@@ -13,9 +13,6 @@ class Graph:
     def __get_incidence_matrix(self):
         pass
 
-    def __is_regular(self):
-        pass
-
     def __enter_number(self):
         pass
 
@@ -153,31 +150,18 @@ class DirectedGraph(Graph):
             half_out_degrees[start - 1] += 1
         return half_out_degrees
 
-    def __is_regular(self):
-        half_in = self.__get_half_in_degrees()
-        half_out = self.__get_half_out_degrees()
-        for i in range(self._n):
-            if (half_in[i] != half_out[0]) or (half_in[i] != half_in[0]):
-                return 0
-        return 1
-
-    def __get_regular_degree(self):
-        half_in = self.__get_half_in_degrees()
-        return half_in[0]
-
     def __show_menu(self):
         print("Choose one of the following : ")
         print("""
                     1 - show incidence matrix
                     2 - show adjacency matrix
-                    3 - show half-in and half-out degrees
-                    4 - check graph for regulating """)
+                    3 - show half-in and half-out degrees """)
 
     def __enter_number(self):
         answer = 0
-        while answer > 4 or answer < 1:
+        while answer > 3 or answer < 1:
             answer = int(input("Type your choice : "))
-            if answer > 4 or answer < 1:
+            if answer > 3 or answer < 1:
                 print("Invalid input!")
         return answer
 
@@ -189,11 +173,6 @@ class DirectedGraph(Graph):
         elif number == 3:
             print("Half - in degrees :", *self.__get_half_in_degrees())
             print("Half - out degrees :", *self.__get_half_out_degrees())
-        elif number == 4:
-            if self.__is_regular():
-                print("Graph is regular!\nRegular degree is equal to", self.__get_regular_degree())
-            else:
-                print("Graph is not regular!")
 
     def start_menu(self):
         self.__show_menu()
