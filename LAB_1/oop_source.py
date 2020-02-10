@@ -179,8 +179,8 @@ class DirectedGraph(Graph):
         elif number == 2:
             print_matrix(self.__get_adjacency_matrix())
         elif number == 3:
-            print("Half - in degrees :", *self.__get_half_in_degrees())
-            print("Half - out degrees :", *self.__get_half_out_degrees())
+            print("In - degrees :", *self.__get_half_in_degrees())
+            print("Out - degrees :", *self.__get_half_out_degrees())
 
     def start_menu(self):  # Start work with number
         self.__show_menu()
