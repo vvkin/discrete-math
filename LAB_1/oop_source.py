@@ -43,13 +43,13 @@ class NotDirectedGraph(Graph):
                 isolated_vertices.append(i + 1)
         return isolated_vertices
 
-    def __get_handle_vertices(self):  # Return handle vertices
+    def __get_hanging_vertices(self):  # Return hanging vertices
         vertex_degree = self.__get_vertex_degrees()
-        handle_vertices = []
+        hanging_vertices = []
         for i in range(len(vertex_degree)):
             if vertex_degree[i] == 1:
-                handle_vertices.append(i + 1)
-        return handle_vertices
+                hanging_vertices.append(i + 1)
+        return hanging_vertices
 
     def __get_adjacency_matrix(self):  # Return adjacency matrix
         adj_matrix = [[0 for i in range(self._n)] for j in range(self._n)]
@@ -95,16 +95,16 @@ class NotDirectedGraph(Graph):
         elif number == 3:
             print(*self.__get_vertex_degrees())
         elif number == 4:
-            handle_vertices = self.__get_handle_vertices()
+            hanging_vertices = self.__get_hanging_vertices()
             isolated_vertices = self.__get_isolated_vertices()
-            if handle_vertices:
-                print("Hanging vertices :", *handle_vertices)
+            if hanging_vertices:
+                print("Hanging vertices :", *hanging_vertices)
             else:
                 print("Graph does not have handle vertices!")
             if isolated_vertices:
                 print("Isolated vertices :", *isolated_vertices)
             else:
-                print("Graph does  not have isolated vertices")
+                print("Graph does not have isolated vertices")
         elif number == 5:
             if self.__is_regular():
                 print("Graph is regular!\nRegular degree is equal to", self.__get_regular_degree())
@@ -118,7 +118,7 @@ class NotDirectedGraph(Graph):
              2 - show adjacency matrix
              3 - show degree of each vertex
              4 - show hanging and isolated vertices
-             5 - check graph for regulating  """)
+             5 - check graph for regularity  """)
 
     def start_menu(self):  # Start work with graph
         self.__show_menu()
