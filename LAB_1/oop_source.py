@@ -205,7 +205,7 @@ def get_input(file_name):  # Get data from input file
 def print_matrix(matrix):  # Print matrix
     for row in matrix:
         for i in row:
-            print(i, end=" ")
+            print("{:>3}".format(i), end=" ")
         print()
 
 
@@ -223,6 +223,3 @@ def main():  # Start of program
 
 
 main()
-
-
-
