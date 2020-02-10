@@ -95,8 +95,16 @@ class NotDirectedGraph(Graph):
         elif number == 3:
             print(*self.__get_vertex_degrees())
         elif number == 4:
-            print("Hanging vertices :", *self.__get_handle_vertices())
-            print("Isolated vertices :", *self.__get_isolated_vertices())
+            handle_vertices = self.__get_handle_vertices()
+            isolated_vertices = self.__get_isolated_vertices()
+            if handle_vertices:
+                print("Hanging vertices :", *handle_vertices)
+            else:
+                print("Graph does not have handle vertices!")
+            if isolated_vertices:
+                print("Isolated vertices :", *isolated_vertices)
+            else:
+                print("Graph does  not have isolated vertices")
         elif number == 5:
             if self.__is_regular():
                 print("Graph is regular!\nRegular degree is equal to", self.__get_regular_degree())
