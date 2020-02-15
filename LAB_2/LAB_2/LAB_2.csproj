@@ -5,4 +5,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="C:\Users\Admin\Desktop\input.txt" Link="input.txt" />
+  </ItemGroup>
+
 </Project>
