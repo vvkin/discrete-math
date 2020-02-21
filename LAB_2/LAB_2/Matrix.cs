@@ -1,49 +1,42 @@
 ﻿using System;
-using System.Globalization;
 using System.Text;
 
-namespace ClassMatrix
+namespace LAB_2
 {
     class Matrix
     {
-        private readonly int size_rows;
-        private readonly int size_columns;
-        private int[,] matrix;
+        private readonly int sizeRows;
+        private readonly int sizeColumns;
+        private readonly int[,] matrix;
         public Matrix(int n, int m)
         {
-            size_rows = (n >= 0) ? n : 0;
-            size_columns = (m >= 0) ? m : 0;
-            matrix = new int[size_rows, size_columns];
+            sizeRows = (n >= 0) ? n : 0;
+            sizeColumns = (m >= 0) ? m : 0;
+            matrix = new int[sizeRows, sizeColumns];
             Console.OutputEncoding = Encoding.Unicode;
         }
         private bool NotOutOfTheRange(int row_index, int column_index)
         {
-            return (row_index >= 0 && row_index < size_rows) && (column_index >= 0 && column_index < size_columns);
+            return (row_index >= 0 && row_index < sizeRows) && (column_index >= 0 && column_index < sizeColumns);
         }
-        public int this[int index_row, int index_column]
+        public int this[int indexRow, int indexColumn]
         {
             set
             {
-                matrix[index_row, index_column] = (NotOutOfTheRange(index_row, index_column)) ? value : 0;
+                matrix[indexRow, indexColumn] = (NotOutOfTheRange(indexRow, indexColumn)) ? value : 0;
             }
             get
             {
-                return (NotOutOfTheRange(index_row, index_column)) ? matrix[index_row, index_column] : 0;
+                return (NotOutOfTheRange(indexRow, indexColumn)) ? matrix[indexRow, indexColumn] : 0;
             }
         }
-        public int getRowSize()
-        {
-            return size_rows;
-        }
-        public int getColSize()
-        {
-            return size_columns;
-        }
+        public int GetRowSize() => sizeRows;
+        public int getColSize() => sizeColumns;
         public static Matrix operator *(Matrix A, Matrix B)
         {
-            Matrix C = new Matrix(A.getRowSize(), B.getColSize());
+            Matrix C = new Matrix(A.GetRowSize(), B.getColSize());
 
-            for (int i = 0; i < A.getRowSize(); ++i)
+            for (int i = 0; i < A.GetRowSize(); ++i)
             {
                 for (int j = 0; j < B.getColSize(); ++j)
                 {
@@ -57,23 +50,23 @@ namespace ClassMatrix
         }
         public void Print()
         {
-            for (int i = 0; i < size_rows; ++i)
+            for (int i = 0; i < sizeRows; ++i)
             {
-                for (int j = 0; j < size_columns; ++j)
+                for (int j = 0; j < sizeColumns; ++j)
                 {
                     if (matrix[i, j] == int.MaxValue)
                         Console.Write("\u221e ");
                     else
-                        System.Console.Write($"{matrix[i, j]} ");
+                        Console.Write($"{matrix[i, j]} ");
                 }
-                System.Console.WriteLine();
+                Console.WriteLine();
             }
         }
-        public void fillInf()
+        public void FillInf()
         {
-            for (int i = 0; i < size_rows; ++i)
+            for (int i = 0; i < sizeRows; ++i)
             {
-                for (int j = 0; j < size_columns; ++j)
+                for (int j = 0; j < sizeColumns; ++j)
                 {
                     matrix[i, j] = int.MaxValue;
                 }
@@ -95,17 +88,16 @@ namespace ClassMatrix
         public int GetMaxInRow(int rowIndex)
         {
             int result = matrix[0, 0];
-            for (int j = 0; j < size_columns; ++j)
+            for (int j = 0; j < sizeColumns; ++j)
             {
                 if (matrix[rowIndex, j] > result)
                     result = matrix[rowIndex, j];
             }
             return result;
         }
-
         public bool ContainsInRow(int rowIndex, int value)
         {
-            for (int j = 0; j < size_columns; ++j)
+            for (int j = 0; j < sizeColumns; ++j)
             {
                 if (matrix[rowIndex, j] == value)
                     return true;

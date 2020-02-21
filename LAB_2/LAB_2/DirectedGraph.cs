@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using ClassMatrix;
 
 namespace LAB_2
 {
@@ -11,15 +9,15 @@ namespace LAB_2
             base(n, m, edges_list){ }
         protected override Matrix GetAdjacencyMatrix()
         {
-            Matrix AdjacencyMatrix = new Matrix(vertex_number, vertex_number);
+            Matrix adjacencyMatrix = new Matrix(vertexNum, vertexNum);
 
-            foreach (var value in edges_list)
+            foreach (var value in edgesList)
             {
                 int start = value.Item1 - 1;
                 int finish = value.Item2 - 1;
-                AdjacencyMatrix[start, finish] = 1;
+                adjacencyMatrix[start, finish] = 1;
             }
-            return AdjacencyMatrix;
+            return adjacencyMatrix;
         }
         protected override void ShowMenu()
         {
@@ -41,29 +39,12 @@ namespace LAB_2
         protected bool IsStrongConnected()
         {
             Matrix reachMatrix = GetReachMatrix();
-            int count = 0;
-            for (int i = 0; i < vertex_number; ++i)
-            {
-                for(int j = 0; j < i; ++j)
-                {
-                    if (reachMatrix[i, j] == reachMatrix[j,i] && reachMatrix[i, j] == 1)
-                    {
-                        ++count;
-                    }
-                }
-            }
-            return (count == vertex_number);
-        }
 
-        protected bool IsOneSideConnected()
-        {
-            Matrix reachMatrix = GetReachMatrix();
-            
-            for(int i = 0; i < vertex_number; ++i)
+            for (int i = 0; i < vertexNum; ++i)
             {
-                for(int j = 0; j < vertex_number; ++j)
+                for(int j = 0; j < vertexNum; ++j)
                 {
-                    if (reachMatrix[i, j] != 1 && reachMatrix[j ,i] != 1)
+                    if (reachMatrix[i, j] != 1 || reachMatrix[j, i] != 1)
                     {
                         return false;
                     }
@@ -72,25 +53,31 @@ namespace LAB_2
             return true;
         }
 
-        protected void MakeNotDirected(ref Matrix A)
-        {
-            for(int i = 0; i < A.getRowSize(); ++i)
-            {
-                for(int j = 0; j < A.getColSize(); ++j)
-                {
-                    if (A[i, j] == 1)
-                        A[j, i] = 1;
-                }
-            }
-        }
-        protected bool  IsWeaklyConnected()
+        protected bool IsOneSideConnected()
         {
             Matrix reachMatrix = GetReachMatrix();
-            MakeNotDirected(ref reachMatrix);
-
-            for(int i = 0; i < vertex_number; ++i)
+            
+            for(int i = 0; i < vertexNum; ++i)
             {
-                for(int j = 0; j < vertex_number; ++j)
+                for(int j = 0; j < vertexNum; ++j)
+                {
+                    if (reachMatrix[i, j] != 1 && reachMatrix[j, i] != 1)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        protected bool IsWeaklyConnected()
+        {
+            Graph A = new Graph(vertexNum, edgesNum, edgesList);
+            Matrix reachMatrix = A.GetReachMatrix();
+           
+            for(int i = 0; i < vertexNum; ++i)
+            {
+                for(int j = 0; j < vertexNum; ++j)
                 {
                     if (reachMatrix[i, j] != 1)
                         return false;
@@ -98,6 +85,7 @@ namespace LAB_2
             }
             return true;
         }
+
         protected string GetConnectedType()
         {
             if (IsStrongConnected()) return "strong connected";

@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Matrix.cs~RFe49e6d.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="C:\Users\Admin\Desktop\input.txt" Link="input.txt" />
   </ItemGroup>
 

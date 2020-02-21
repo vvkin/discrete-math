@@ -10,18 +10,19 @@ namespace WorkSpace
         public static void Main(string[] args)
         {
             Parser Info = new Parser("input.txt");
-            (int n, int m, List<(int, int)> edges_list) = Info.getInput();
-            System.Console.Write("Is you graph directed?(y/n) : ");
+            (int vertexNum, int edgesNum, List<(int, int)> edgesList) = Info.GetInput();
+
+            System.Console.Write("Is your graph directed?(y/n) : ");
             string graphType = System.Console.ReadLine();
 
             if (graphType == "y")
             {
-                DirectedGraph graph = new DirectedGraph(n, m, edges_list);
+                DirectedGraph graph = new DirectedGraph(vertexNum, edgesNum, edgesList);
                 graph.StartMenu();
             }
             else
             {
-                NotDirectedGraph graph = new NotDirectedGraph(n, m, edges_list);
+                NotDirectedGraph graph = new NotDirectedGraph(vertexNum, edgesNum, edgesList);
                 graph.StartMenu();
             }
         }
@@ -30,13 +31,13 @@ namespace WorkSpace
     class Parser
     {
         private readonly StreamReader file;
-        public Parser(string file_name)
+        public Parser(string fileName)
         {
-            string path = "../../../" + file_name;
+            string path = "../../../" + fileName;
             file = new StreamReader(path);
         }
 
-        private (int, int) parseRow(string row)
+        private (int, int) ParseRow(string row)
         {
             string[] characters = row.Split(" ");
             int[] numbers = Array.ConvertAll(characters, s => int.Parse(s));
@@ -44,62 +45,56 @@ namespace WorkSpace
 
         }
 
-        public (int, int, List<(int, int)>) getInput()
+        public (int, int, List<(int, int)>) GetInput()
         {
             string line = file.ReadLine();
-            (int n, int m) = parseRow(line);
-            List<(int, int)> edges_list = new List<(int, int)>();
+            (int n, int m) = ParseRow(line);
+            List<(int, int)> edgesList = new List<(int, int)>();
 
-            for (int i = 0; i < n; ++i)
+            for (int i = 0; i < m; ++i)
             {
                 line = file.ReadLine();
                 if (line != null)
-                    edges_list.Add(parseRow(line));
+                    edgesList.Add(ParseRow(line));
             }
-            return (n, m, edges_list);
+            return (n, m, edgesList);
         }
     }
 
     class Matrix
     {
-        private readonly int size_rows;
-        private readonly int size_columns;
-        private int[,] matrix;
+        private readonly int sizeRows;
+        private readonly int sizeColumns;
+        private readonly int[,] matrix;
         public Matrix(int n, int m)
         {
-            size_rows = (n >= 0) ? n : 0;
-            size_columns = (m >= 0) ? m : 0;
-            matrix = new int[size_rows, size_columns];
+            sizeRows = (n >= 0) ? n : 0;
+            sizeColumns = (m >= 0) ? m : 0;
+            matrix = new int[sizeRows, sizeColumns];
             Console.OutputEncoding = Encoding.Unicode;
         }
         private bool NotOutOfTheRange(int row_index, int column_index)
         {
-            return (row_index >= 0 && row_index < size_rows) && (column_index >= 0 && column_index < size_columns);
+            return (row_index >= 0 && row_index < sizeRows) && (column_index >= 0 && column_index < sizeColumns);
         }
-        public int this[int index_row, int index_column]
+        public int this[int indexRow, int indexColumn]
         {
             set
             {
-                matrix[index_row, index_column] = (NotOutOfTheRange(index_row, index_column)) ? value : 0;
+                matrix[indexRow, indexColumn] = (NotOutOfTheRange(indexRow, indexColumn)) ? value : 0;
             }
             get
             {
-                return (NotOutOfTheRange(index_row, index_column)) ? matrix[index_row, index_column] : 0;
+                return (NotOutOfTheRange(indexRow, indexColumn)) ? matrix[indexRow, indexColumn] : 0;
             }
         }
-        public int getRowSize()
-        {
-            return size_rows;
-        }
-        public int getColSize()
-        {
-            return size_columns;
-        }
+        public int GetRowSize() => sizeRows;
+        public int getColSize() => sizeColumns;
         public static Matrix operator *(Matrix A, Matrix B)
         {
-            Matrix C = new Matrix(A.getRowSize(), B.getColSize());
+            Matrix C = new Matrix(A.GetRowSize(), B.getColSize());
 
-            for (int i = 0; i < A.getRowSize(); ++i)
+            for (int i = 0; i < A.GetRowSize(); ++i)
             {
                 for (int j = 0; j < B.getColSize(); ++j)
                 {
@@ -113,23 +108,23 @@ namespace WorkSpace
         }
         public void Print()
         {
-            for (int i = 0; i < size_rows; ++i)
+            for (int i = 0; i < sizeRows; ++i)
             {
-                for (int j = 0; j < size_columns; ++j)
+                for (int j = 0; j < sizeColumns; ++j)
                 {
                     if (matrix[i, j] == int.MaxValue)
                         Console.Write("\u221e ");
                     else
-                        System.Console.Write($"{matrix[i, j]} ");
+                        Console.Write($"{matrix[i, j]} ");
                 }
-                System.Console.WriteLine();
+                Console.WriteLine();
             }
         }
-        public void fillInf()
+        public void FillInf()
         {
-            for (int i = 0; i < size_rows; ++i)
+            for (int i = 0; i < sizeRows; ++i)
             {
-                for (int j = 0; j < size_columns; ++j)
+                for (int j = 0; j < sizeColumns; ++j)
                 {
                     matrix[i, j] = int.MaxValue;
                 }
@@ -151,17 +146,16 @@ namespace WorkSpace
         public int GetMaxInRow(int rowIndex)
         {
             int result = matrix[0, 0];
-            for (int j = 0; j < size_columns; ++j)
+            for (int j = 0; j < sizeColumns; ++j)
             {
                 if (matrix[rowIndex, j] > result)
                     result = matrix[rowIndex, j];
             }
             return result;
         }
-
         public bool ContainsInRow(int rowIndex, int value)
         {
-            for (int j = 0; j < size_columns; ++j)
+            for (int j = 0; j < sizeColumns; ++j)
             {
                 if (matrix[rowIndex, j] == value)
                     return true;
@@ -172,15 +166,15 @@ namespace WorkSpace
 
     class Graph
     {
-        protected readonly int vertex_number;
-        protected readonly int edges_number;
-        protected readonly List<(int, int)> edges_list;
+        protected readonly int vertexNum;
+        protected readonly int edgesNum;
+        protected readonly List<(int, int)> edgesList;
 
-        public Graph(int n, int m, List<(int, int)> edges_array)
+        public Graph(int n, int m, List<(int, int)> edgesArray)
         {
-            vertex_number = (n >= 0) ? n : 0;
-            edges_number = (m >= 0) ? m : 0;
-            edges_list = edges_array;
+            vertexNum = (n >= 0) ? n : 0;
+            edgesNum = (m >= 0) ? m : 0;
+            edgesList = edgesArray;
         }
         protected virtual void ShowMenu()
         {
@@ -215,20 +209,20 @@ namespace WorkSpace
         }
         protected virtual Matrix GetAdjacencyMatrix()
         {
-            Matrix AdjacencyMatrix = new Matrix(vertex_number, vertex_number);
+            Matrix adjacencyMatrix = new Matrix(vertexNum, vertexNum);
 
-            foreach (var value in edges_list)
+            foreach (var value in edgesList)
             {
                 int start = value.Item1 - 1;
                 int finish = value.Item2 - 1;
-                AdjacencyMatrix[start, finish] = 1;
-                AdjacencyMatrix[finish, start] = 1;
+                adjacencyMatrix[start, finish] = 1;
+                adjacencyMatrix[finish, start] = 1;
             }
-            return AdjacencyMatrix;
+            return adjacencyMatrix;
         }
         protected void FillPath(ref Matrix ToFill, Matrix A, int path_length)
         {
-            for (int i = 0; i < A.getRowSize(); ++i)
+            for (int i = 0; i < A.GetRowSize(); ++i)
             {
                 for (int j = 0; j < A.getColSize(); ++j)
                 {
@@ -246,41 +240,41 @@ namespace WorkSpace
         }
         protected Matrix GetDistanceMatrix()
         {
-            Matrix ResultMatrix = new Matrix(vertex_number, vertex_number);
-            Matrix ToMultiple = GetAdjacencyMatrix();
-            Matrix AdjacencyMatrix = GetAdjacencyMatrix();
-            ResultMatrix.fillInf();
+            Matrix resultMatrix = new Matrix(vertexNum, vertexNum);
+            Matrix toMultiple = GetAdjacencyMatrix();
+            Matrix adjacencyMatrix = GetAdjacencyMatrix();
+            resultMatrix.FillInf();
 
-            for (int i = 0; i < vertex_number; ++i)
+            for (int i = 0; i < vertexNum; ++i)
             {
-                FillPath(ref ResultMatrix, ToMultiple, i + 1);
-                ToMultiple *= AdjacencyMatrix;
+                FillPath(ref resultMatrix, toMultiple, i + 1);
+                toMultiple *= adjacencyMatrix;
             }
-            return ResultMatrix;
+            return resultMatrix;
         }
         protected void FillReach(ref Matrix ToFill, Matrix A)
         {
-            for (int i = 0; i < vertex_number; ++i)
+            for (int i = 0; i < vertexNum; ++i)
             {
-                for (int j = 0; j < vertex_number; ++j)
+                for (int j = 0; j < vertexNum; ++j)
                 {
                     if ((i == j) || (A[i, j] != 0))
                         ToFill[i, j] = 1;
                 }
             }
         }
-        protected Matrix GetReachMatrix()
+        public Matrix GetReachMatrix()
         {
-            Matrix ReachMatrix = new Matrix(vertex_number, vertex_number);
-            Matrix AdjacencyMatrix = GetAdjacencyMatrix();
-            Matrix ToMultiple = GetAdjacencyMatrix();
+            Matrix reachMatrix = new Matrix(vertexNum, vertexNum);
+            Matrix adjacencyMatrix = GetAdjacencyMatrix();
+            Matrix toMultiple = GetAdjacencyMatrix();
 
-            for (int i = 0; i < vertex_number; ++i)
+            for (int i = 0; i < vertexNum; ++i)
             {
-                FillReach(ref ReachMatrix, ToMultiple);
-                ToMultiple *= AdjacencyMatrix;
+                FillReach(ref reachMatrix, toMultiple);
+                toMultiple *= adjacencyMatrix;
             }
-            return ReachMatrix;
+            return reachMatrix;
         }
         public virtual void StartMenu(int down, int up)
         {
@@ -302,15 +296,15 @@ namespace WorkSpace
         { }
         protected override Matrix GetAdjacencyMatrix()
         {
-            Matrix AdjacencyMatrix = new Matrix(vertex_number, vertex_number);
+            Matrix adjacencyMatrix = new Matrix(vertexNum, vertexNum);
 
-            foreach (var value in edges_list)
+            foreach (var value in edgesList)
             {
                 int start = value.Item1 - 1;
                 int finish = value.Item2 - 1;
-                AdjacencyMatrix[start, finish] = 1;
+                adjacencyMatrix[start, finish] = 1;
             }
-            return AdjacencyMatrix;
+            return adjacencyMatrix;
         }
         protected override void ShowMenu()
         {
@@ -332,27 +326,27 @@ namespace WorkSpace
         protected bool IsStrongConnected()
         {
             Matrix reachMatrix = GetReachMatrix();
-            int count = 0;
-            for (int i = 0; i < vertex_number; ++i)
+
+            for (int i = 0; i < vertexNum; ++i)
             {
-                for (int j = 0; j < i; ++j)
+                for (int j = 0; j < vertexNum; ++j)
                 {
-                    if (reachMatrix[i, j] == reachMatrix[j, i] && reachMatrix[i, j] == 1)
+                    if (reachMatrix[i, j] != 1 || reachMatrix[j, i] != 1)
                     {
-                        ++count;
+                        return false;
                     }
                 }
             }
-            return (count == vertex_number);
+            return true;
         }
 
         protected bool IsOneSideConnected()
         {
             Matrix reachMatrix = GetReachMatrix();
 
-            for (int i = 0; i < vertex_number; ++i)
+            for (int i = 0; i < vertexNum; ++i)
             {
-                for (int j = 0; j < vertex_number; ++j)
+                for (int j = 0; j < vertexNum; ++j)
                 {
                     if (reachMatrix[i, j] != 1 && reachMatrix[j, i] != 1)
                     {
@@ -363,25 +357,14 @@ namespace WorkSpace
             return true;
         }
 
-        protected void MakeNotDirected(ref Matrix A)
-        {
-            for (int i = 0; i < A.getRowSize(); ++i)
-            {
-                for (int j = 0; j < A.getColSize(); ++j)
-                {
-                    if (A[i, j] == 1)
-                        A[j, i] = 1;
-                }
-            }
-        }
         protected bool IsWeaklyConnected()
         {
-            Matrix reachMatrix = GetReachMatrix();
-            MakeNotDirected(ref reachMatrix);
+            Graph A = new Graph(vertexNum, edgesNum, edgesList);
+            Matrix reachMatrix = A.GetReachMatrix();
 
-            for (int i = 0; i < vertex_number; ++i)
+            for (int i = 0; i < vertexNum; ++i)
             {
-                for (int j = 0; j < vertex_number; ++j)
+                for (int j = 0; j < vertexNum; ++j)
                 {
                     if (reachMatrix[i, j] != 1)
                         return false;
@@ -389,6 +372,7 @@ namespace WorkSpace
             }
             return true;
         }
+
         protected string GetConnectedType()
         {
             if (IsStrongConnected()) return "strong connected";
@@ -400,24 +384,24 @@ namespace WorkSpace
 
     class NotDirectedGraph : Graph
     {
-        public NotDirectedGraph(int n, int m, List<(int, int)> edges_list) :
-            base(n, m, edges_list)
+        public NotDirectedGraph(int n, int m, List<(int, int)> edgesList) :
+            base(n, m, edgesList)
         { }
 
         protected int GetRadius()
         {
             Matrix distanceMatrix = GetDistanceMatrix();
-            int Radius = distanceMatrix.GetMaxInRow(0);
+            int radius = distanceMatrix.GetMaxInRow(0);
 
-            for (int i = 1; i < vertex_number; ++i)
+            for (int i = 1; i < vertexNum; ++i)
             {
                 int currentEccentricity = distanceMatrix.GetMaxInRow(i);
-                if (currentEccentricity < Radius)
+                if (currentEccentricity < radius)
                 {
-                    Radius = currentEccentricity;
+                    radius = currentEccentricity;
                 }
             }
-            return Radius;
+            return radius;
         }
         protected int GetDiameter()
         {
@@ -426,13 +410,13 @@ namespace WorkSpace
         }
         protected List<int> GetCenter()
         {
-            int Radius = GetRadius();
+            int radius = GetRadius();
             Matrix distanceMatrix = GetDistanceMatrix();
             List<int> centresList = new List<int>();
-            for (int i = 0; i < vertex_number; ++i)
+            for (int i = 0; i < vertexNum; ++i)
             {
                 int currentEccentricity = distanceMatrix.GetMaxInRow(i);
-                if (currentEccentricity == Radius)
+                if (currentEccentricity == radius)
                     centresList.Add(i + 1);
             }
             return centresList;
@@ -443,9 +427,9 @@ namespace WorkSpace
             List<int> distances = new List<int>();
             Matrix distanceMatrix = GetDistanceMatrix();
 
-            for (int i = 0; i < vertex_number; ++i)
+            for (int i = 0; i < vertexNum; ++i)
             {
-                for (int j = 0; j < vertex_number; ++j)
+                for (int j = 0; j < vertexNum; ++j)
                 {
                     if (!distances.Contains(distanceMatrix[i, j]))
                     {
@@ -464,14 +448,14 @@ namespace WorkSpace
             foreach (var value in distances)
             {
                 List<int> temp = new List<int>();
-                for (int i = 0; i < vertex_number; ++i)
+                for (int i = 0; i < vertexNum; ++i)
                 {
                     if (distancesMatrix.ContainsInRow(i, value))
                     {
-                        temp.Add(i);
+                        temp.Add(i + 1);
                     }
                 }
-                if (value != Int32.MaxValue)
+                if (value != int.MaxValue)
                     Console.Write($"Distance = {value} : ");
                 else
                     Console.Write("Distance = \u221e : ");
@@ -495,16 +479,16 @@ namespace WorkSpace
             switch (number)
             {
                 case 3:
-                    int Diameter = GetDiameter();
-                    if (Diameter != int.MaxValue)
-                        Console.WriteLine($"Diameter = {Diameter}");
+                    int diameter = GetDiameter();
+                    if (diameter != int.MaxValue)
+                        Console.WriteLine($"Diameter = {diameter}");
                     else
                         Console.WriteLine("Diameter = \u221e ");
                     break;
                 case 4:
-                    int Radius = GetRadius();
-                    if (Radius != Int32.MaxValue)
-                        Console.WriteLine($"Radius = {Radius}");
+                    int radius = GetRadius();
+                    if (radius != int.MaxValue)
+                        Console.WriteLine($"Radius = {radius}");
                     else
                         Console.WriteLine("Radius = \u221e ");
                     break;

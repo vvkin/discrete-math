@@ -7,13 +7,13 @@ namespace LAB_2
     class Parser
     {
         private readonly StreamReader file;
-        public Parser(string file_name)
+        public Parser(string fileName)
         {
-            string path = "../../../" + file_name;
+            string path = "../../../" + fileName;
             file = new StreamReader(path);
         }
 
-        private (int, int) parseRow(string row)
+        private (int, int) ParseRow(string row)
         {
             string[] characters = row.Split(" ");
             int[] numbers = Array.ConvertAll(characters, s => int.Parse(s));
@@ -21,19 +21,19 @@ namespace LAB_2
 
         }
 
-        public (int, int, List<(int, int)>) getInput()
+        public (int, int, List<(int, int)>) GetInput()
         {
             string line = file.ReadLine();
-            (int n, int m) = parseRow(line);
-            List<(int, int)> edges_list = new List<(int, int)>();
+            (int n, int m) = ParseRow(line);
+            List<(int, int)> edgesList = new List<(int, int)>();
             
-            for(int i = 0; i < n; ++i)
+            for(int i = 0; i < m; ++i)
             {
                 line = file.ReadLine();
                 if (line != null)
-                    edges_list.Add(parseRow(line));
+                    edgesList.Add(ParseRow(line));
             }
-            return (n, m, edges_list);
+            return (n, m, edgesList);
         }
     }
 }

@@ -1,29 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using ClassMatrix;
 
 namespace LAB_2
 {
     class NotDirectedGraph : Graph
     {
-        public NotDirectedGraph(int n, int m, List<(int, int)> edges_list) :
-            base(n, m, edges_list) { }
+        public NotDirectedGraph(int n, int m, List<(int, int)> edgesList) :
+            base(n, m, edgesList) { }
         
         protected int GetRadius()
         {
             Matrix distanceMatrix = GetDistanceMatrix();
-            int Radius = distanceMatrix.GetMaxInRow(0);
+            int radius = distanceMatrix.GetMaxInRow(0);
 
-            for(int i = 1; i < vertex_number; ++i)
+            for(int i = 1; i < vertexNum; ++i)
             {
                 int currentEccentricity = distanceMatrix.GetMaxInRow(i);
-                if (currentEccentricity < Radius)
+                if (currentEccentricity < radius)
                 {
-                    Radius = currentEccentricity;
+                    radius = currentEccentricity;
                 }
             }
-            return Radius;
+            return radius;
         }
         protected int GetDiameter()
         {
@@ -32,13 +30,13 @@ namespace LAB_2
         }
         protected List<int> GetCenter()
         {
-            int Radius = GetRadius();
+            int radius = GetRadius();
             Matrix distanceMatrix = GetDistanceMatrix();
             List<int> centresList = new List<int>();
-            for (int i = 0; i < vertex_number; ++i)
+            for (int i = 0; i < vertexNum; ++i)
             {
                 int currentEccentricity = distanceMatrix.GetMaxInRow(i);
-                if (currentEccentricity == Radius)
+                if (currentEccentricity == radius)
                     centresList.Add(i + 1);
             }
             return centresList;
@@ -49,9 +47,9 @@ namespace LAB_2
             List<int> distances = new List<int>();
             Matrix distanceMatrix = GetDistanceMatrix();
             
-            for(int i = 0; i < vertex_number; ++i)
+            for(int i = 0; i < vertexNum; ++i)
             {
-                for(int j = 0; j < vertex_number; ++j)
+                for(int j = 0; j < vertexNum; ++j)
                 {
                     if (!distances.Contains(distanceMatrix[i, j]))
                     {
@@ -70,14 +68,14 @@ namespace LAB_2
             foreach(var value in distances)
             {
                 List<int> temp = new List<int>();
-                for(int i = 0; i < vertex_number; ++i)
+                for(int i = 0; i < vertexNum; ++i)
                 {
                     if (distancesMatrix.ContainsInRow(i, value))
                     {
-                        temp.Add(i);
+                        temp.Add(i + 1);
                     }
                 }
-                if (value != Int32.MaxValue)
+                if (value != int.MaxValue)
                     Console.Write($"Distance = {value} : ");
                 else
                     Console.Write("Distance = \u221e : ");
@@ -101,16 +99,16 @@ namespace LAB_2
             switch(number)
             {
                 case 3:
-                    int Diameter = GetDiameter();
-                    if (Diameter != int.MaxValue)
-                        Console.WriteLine($"Diameter = {Diameter}");
+                    int diameter = GetDiameter();
+                    if (diameter != int.MaxValue)
+                        Console.WriteLine($"Diameter = {diameter}");
                     else
                         Console.WriteLine("Diameter = \u221e ");
                     break;
                 case 4:
-                    int Radius = GetRadius();
-                    if (Radius != Int32.MaxValue)
-                        Console.WriteLine($"Radius = {Radius}");
+                    int radius = GetRadius();
+                    if (radius != int.MaxValue)
+                        Console.WriteLine($"Radius = {radius}");
                     else
                         Console.WriteLine("Radius = \u221e ");
                     break;

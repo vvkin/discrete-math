@@ -1,20 +1,19 @@
 ﻿using System.Collections.Generic;
-using ClassMatrix;
 using System;
 
 namespace LAB_2
 {
     class Graph
     {
-        protected readonly int vertex_number;
-        protected readonly int edges_number;
-        protected readonly List<(int, int)> edges_list;
+        protected readonly int vertexNum;
+        protected readonly int edgesNum;
+        protected readonly List<(int, int)> edgesList;
 
-        public Graph(int n, int m, List<(int, int)> edges_array)
+        public Graph(int n, int m, List<(int, int)> edgesArray)
         {
-            vertex_number = (n >= 0) ? n : 0;
-            edges_number = (m >= 0) ? m : 0;
-            edges_list = edges_array;
+            vertexNum = (n >= 0) ? n : 0;
+            edgesNum = (m >= 0) ? m : 0;
+            edgesList = edgesArray;
         }
         protected virtual void ShowMenu()
         {
@@ -49,20 +48,20 @@ namespace LAB_2
         }
         protected virtual Matrix GetAdjacencyMatrix()
         {
-            Matrix AdjacencyMatrix = new Matrix(vertex_number, vertex_number);
+            Matrix adjacencyMatrix = new Matrix(vertexNum, vertexNum);
 
-            foreach (var value in edges_list)
+            foreach (var value in edgesList)
             {
                 int start = value.Item1 - 1;
                 int finish = value.Item2 - 1;
-                AdjacencyMatrix[start, finish] = 1;
-                AdjacencyMatrix[finish, start] = 1;
+                adjacencyMatrix[start, finish] = 1;
+                adjacencyMatrix[finish, start] = 1;
             }
-            return AdjacencyMatrix;
+            return adjacencyMatrix;
         }
         protected void FillPath(ref Matrix ToFill, Matrix A, int path_length)
         {
-            for (int i = 0; i < A.getRowSize(); ++i)
+            for (int i = 0; i < A.GetRowSize(); ++i)
             {
                 for (int j = 0; j < A.getColSize(); ++j)
                 {
@@ -80,42 +79,41 @@ namespace LAB_2
         }
         protected Matrix GetDistanceMatrix()
         {
-            Matrix ResultMatrix = new Matrix(vertex_number, vertex_number);
-            Matrix ToMultiple = GetAdjacencyMatrix();
-            Matrix AdjacencyMatrix = GetAdjacencyMatrix();
-            ResultMatrix.fillInf();
-            ToMultiple.Print();
+            Matrix resultMatrix = new Matrix(vertexNum, vertexNum);
+            Matrix toMultiple = GetAdjacencyMatrix();
+            Matrix adjacencyMatrix = GetAdjacencyMatrix();
+            resultMatrix.FillInf();
 
-            for (int i = 0; i < vertex_number; ++i)
+            for (int i = 0; i < vertexNum; ++i)
             {
-                FillPath(ref ResultMatrix, ToMultiple, i + 1);
-                ToMultiple *= AdjacencyMatrix;
+                FillPath(ref resultMatrix, toMultiple, i + 1);
+                toMultiple *= adjacencyMatrix;
             }
-            return ResultMatrix;
+            return resultMatrix;
         }
         protected void FillReach(ref Matrix ToFill, Matrix A)
         {
-            for(int i = 0; i < vertex_number; ++i)
+            for(int i = 0; i < vertexNum; ++i)
             {
-                for(int j = 0; j < vertex_number; ++j)
+                for(int j = 0; j < vertexNum; ++j)
                 {
                     if ((i == j) || (A[i, j] != 0))
                         ToFill[i, j] = 1;
                 }
             }
         }
-        protected Matrix GetReachMatrix()
+        public Matrix GetReachMatrix()
         {
-            Matrix ReachMatrix = new Matrix(vertex_number, vertex_number);
-            Matrix AdjacencyMatrix = GetAdjacencyMatrix();
-            Matrix ToMultiple = GetAdjacencyMatrix();
+            Matrix reachMatrix = new Matrix(vertexNum, vertexNum);
+            Matrix adjacencyMatrix = GetAdjacencyMatrix();
+            Matrix toMultiple = GetAdjacencyMatrix();
 
-            for(int i = 0; i < vertex_number; ++i)
+            for(int i = 0; i < vertexNum; ++i)
             {
-                FillReach(ref ReachMatrix, ToMultiple);
-                ToMultiple *= AdjacencyMatrix;
+                FillReach(ref reachMatrix, toMultiple);
+                toMultiple *= adjacencyMatrix;
             }
-            return ReachMatrix;
+            return reachMatrix;
         }
         public virtual void StartMenu(int down, int up)
         {
