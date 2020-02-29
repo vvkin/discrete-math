@@ -1,0 +1,58 @@
+﻿using System.Collections.Generic;
+
+namespace LAB_4
+{
+    class GraphAlgorithm
+    {
+        private readonly Writer writer;
+        private readonly NotDirectedGraph graph;
+
+        public GraphAlgorithm(NotDirectedGraph graph, string writeMode, string fileName = null)
+        {
+            this.graph = new NotDirectedGraph(graph);
+            writer = new Writer(writeMode, fileName);
+        }
+
+        private int[] TopologicalSort()
+        {
+            HashSet<int> visited = new HashSet<int>();
+            int[] answer = new int[graph.verticesNum];
+            Dictionary<int, List<int>> adjList = graph.GetAdjList();
+            int currentPlace = graph.verticesNum;
+
+
+            for(int vertex = 0; vertex < graph.verticesNum; ++vertex)
+            {
+                if (!visited.Contains(vertex))
+                {
+                    DFS(vertex);
+                }
+            }
+
+            void DFS(int start)
+            {
+                visited.Add(start);
+                
+                foreach(var vertex in adjList[start])
+                {
+                    if (!visited.Contains(vertex))
+                    {
+                        DFS(vertex);
+                    }
+                }
+                answer[--currentPlace] = start + 1;
+            }
+            return answer;
+        }
+
+        public void PrintTolopologicalSort()
+        {
+            int[] result = TopologicalSort();
+            
+            foreach(var vertex in result)
+            {
+                writer.Write($"{vertex} ");
+            }
+        }
+    }
+}
