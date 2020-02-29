@@ -1,0 +1,6 @@
+The amount of strong connected components is equal to 3
+
+Componets : 
+4 
+5 
+1 2 3 
