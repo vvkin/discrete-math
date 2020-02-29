@@ -5,11 +5,11 @@ namespace LAB_4
     class GraphAlgorithm
     {
         private readonly Writer writer;
-        private readonly NotDirectedGraph graph;
+        private readonly DirectedGraph graph;
 
-        public GraphAlgorithm(NotDirectedGraph graph, string writeMode, string fileName = null)
+        public GraphAlgorithm(DirectedGraph graph, string writeMode, string fileName = null)
         {
-            this.graph = new NotDirectedGraph(graph);
+            this.graph = new DirectedGraph(graph);
             writer = new Writer(writeMode, fileName);
         }
 

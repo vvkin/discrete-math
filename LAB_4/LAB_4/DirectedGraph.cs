@@ -2,20 +2,20 @@
 
 namespace LAB_4
 {
-    class NotDirectedGraph
+    class DirectedGraph
     {
         public int verticesNum { get; }
         private readonly int edgesNum;
         private readonly List<(int, int)> edgesList;
 
-        public NotDirectedGraph(int n, int m, List<(int, int)> edgesArray)
+        public DirectedGraph(int n, int m, List<(int, int)> edgesArray)
         {
             verticesNum = (n >= 0) ? n : 0;
             edgesNum = (m >= 0) ? m : 0;
             edgesList = edgesArray;
         }
 
-        public NotDirectedGraph(NotDirectedGraph graph)
+        public DirectedGraph(DirectedGraph graph)
         {
             verticesNum = graph.verticesNum;
             edgesNum = graph.edgesNum;
@@ -37,10 +37,6 @@ namespace LAB_4
                 if (!adjList[start].Contains(finish))
                 {
                     adjList[start].Add(finish);
-                }
-                if (!adjList[finish].Contains(start))
-                {
-                    adjList[finish].Add(start);
                 }
             }
             foreach(var key in adjList.Keys)

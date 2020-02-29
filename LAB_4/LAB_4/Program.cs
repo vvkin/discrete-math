@@ -8,7 +8,7 @@ namespace LAB_4
         {
             Parser parser = new Parser("input.txt");
             (int n, int m, List<(int, int)> edgesList) = parser.GetInput();
-            NotDirectedGraph graph = new NotDirectedGraph(n, m, edgesList);
+            DirectedGraph graph = new DirectedGraph(n, m, edgesList);
 
             System.Console.Write("Do you want to work with file or console?(console/file) : ");
             string writeType = System.Console.ReadLine();
