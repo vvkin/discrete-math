@@ -65,14 +65,14 @@ namespace LAB_3
 
         private void ShowTable(int vertex, int bfsNum)
         {
-            writer.Write($"   {vertex}   |  {bfsNum}  | ");
+            writer.Write($"   {vertex + 1}   |  {bfsNum}  | ");
         }
 
         private void PrintList(List<int> toPrint)
         {
             foreach(var value in toPrint)
             {
-                writer.Write($"{value} ");
+                writer.Write($"{value + 1} ");
             }
             writer.WriteLine();
         }
@@ -84,31 +84,33 @@ namespace LAB_3
             HashSet<int> visited = new HashSet<int>();
             int k = 0;
             int humanIndex = 1;
+            start -= humanIndex;
 
             writer.WriteLine("Vertex | BFS | QUEUE");
 
             queue.Enqueue(start);
-            visited.Add(start - humanIndex);
+            visited.Add(start);
             ShowTable(start, ++k);
             PrintList(queue.ToList());
 
-            start -= humanIndex;
-
             while (queue.Count() != 0)
             {
+                start = queue.Peek();
+
                 foreach (var vertex in adjList[start])
                 {
                     if (!visited.Contains(vertex))
                     {
+                        queue.Enqueue(vertex);
                         visited.Add(vertex);
-                        queue.Enqueue(vertex + humanIndex);
-                        ShowTable(vertex + humanIndex, ++k);
+                        ShowTable(vertex, ++k);
                         PrintList(queue.ToList());
                     }
                 }
-                writer.Write($"   {start + humanIndex}   |  -  | ");
+                start = queue.Dequeue();
+                writer.Write($"   -   |  -  | ");
                 PrintList(queue.ToList());
-                start = queue.Dequeue() - humanIndex;
+
             }
         }
 
@@ -119,15 +121,18 @@ namespace LAB_3
             HashSet<int> visited = new HashSet<int>();
             int k = 0;
             int humanIndex = 1;
+            start -= humanIndex;
 
             writer.WriteLine("Vertex | DFS | Stack");
 
             stack.Push(start);
-            visited.Add(start - humanIndex);
+            visited.Add(start);
             ShowTable(start, ++k);
             PrintList(stack.ToList());
 
-            DoWork(start - humanIndex);
+            DoWork(start);
+
+            writer.WriteLine("   -   |  -  | ");
 
             void DoWork(int start)
             {
@@ -135,18 +140,20 @@ namespace LAB_3
                 {
                     if (!visited.Contains(vertex))
                     {
-                        stack.Push(vertex + humanIndex);
+                        stack.Push(vertex);
                         visited.Add(vertex);
-                        ShowTable(vertex + humanIndex, ++k);
+                        ShowTable(vertex, ++k);
                         PrintList(stack.ToList());
                         DoWork(vertex);
+
+                        if (stack.Count() == 0) return;
+                        int stackHead = stack.Pop();
+                        writer.Write("   -   |  -  | ");
+                        PrintList(stack.ToList());
+                        DoWork(stackHead);
                     }
                 }
-                if (stack.Count() == 0) return;
-                int stackHead = stack.Pop();
-                writer.Write($"   {stackHead}   |  -  | ");
-                PrintList(stack.ToList());
-                DoWork(stackHead - humanIndex);
+                
             }
         }
     }
