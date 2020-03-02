@@ -19,9 +19,10 @@ namespace LAB_4
             int[] answer = new int[graph.verticesNum];
             Dictionary<int, List<int>> adjList = graph.GetAdjList();
             int currentPlace = graph.verticesNum;
+            int humanIndex = 1;
 
 
-            for(int vertex = 0; vertex < graph.verticesNum; ++vertex)
+            for (int vertex = 0; vertex < graph.verticesNum; ++vertex)
             {
                 if (!visited.Contains(vertex))
                 {
@@ -40,8 +41,9 @@ namespace LAB_4
                         DFS(vertex);
                     }
                 }
-                answer[--currentPlace] = start + 1;
+                answer[--currentPlace] = start + humanIndex;
             }
+
             return answer;
         }
 
@@ -53,6 +55,8 @@ namespace LAB_4
             {
                 writer.Write($"{vertex} ");
             }
+
+            writer.Close();
         }
     }
 }

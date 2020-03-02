@@ -82,15 +82,15 @@ namespace LAB_4_2_
                     }
                 }
             }
+
             return componentsList;
         }
-
 
         public void PrintStrongConnectedComponents()
         {
             List<List<int>> componetsList = GetConnectComponents();
 
-            writer.WriteLine($"The number of strong connected components is equal to {componetsList.Count}");
+            writer.WriteLine($"The number of strongly connected components is equal to {componetsList.Count}");
             writer.WriteLine("\nComponets : ");
 
             foreach(var component in componetsList)
@@ -102,6 +102,8 @@ namespace LAB_4_2_
                 }
                 writer.WriteLine();
             }
+
+            writer.Close();
         }
     }
 }

@@ -1,24 +1,23 @@
-﻿using System.IO;
-
-namespace LAB_4_2_
+﻿namespace LAB_4_2_
 {
     class Writer
     {
-         private readonly string writeMode;
-         private readonly string fileName;
+        private readonly string writeMode;
+        private readonly string fileName;
+        private readonly System.IO.StreamWriter cw;
 
         public Writer(string writeMode, string fileName = "output.txt")
         {
             this.writeMode = writeMode;
-            this.fileName = (this.writeMode == "file") ? fileName : null;
-            if (fileName != null)
+            if (this.writeMode == "file")
             {
-                using var cw = new StreamWriter("../../../" + fileName);
-                cw.Write("");
+                this.fileName = fileName;
+                this.cw = new System.IO.StreamWriter("../../../" + fileName);
+                cw.Close();
+                this.cw = new System.IO.StreamWriter("../../../" + fileName, true);
             }
         }
 
-        
         public void Write(string line = "")
         {
             if (writeMode == "console")
@@ -27,7 +26,6 @@ namespace LAB_4_2_
             }
             else
             {
-                using System.IO.StreamWriter cw = new System.IO.StreamWriter("../../../" + fileName, true);
                 cw.Write(line);
             }
         }
@@ -35,6 +33,14 @@ namespace LAB_4_2_
         public void WriteLine(string line = "")
         {
             Write(line + "\n");
+        }
+
+        public void Close()
+        {
+            if (writeMode != "console")
+            {
+                cw.Close();
+            }
         }
     }
 }
