@@ -13,7 +13,6 @@ namespace LAB_3
             writer = new Writer(writeMode, fileName);
         }
 
-      
         private void ShowMenu()
         {
             System.Console.WriteLine("Choose one of the next options\n" +
@@ -34,7 +33,6 @@ namespace LAB_3
             }
             return number;
         }
-
 
         private void WorkWithNumber(int number)
         {
@@ -62,9 +60,9 @@ namespace LAB_3
                 answer = System.Console.ReadLine();
                 writer.WriteLine();
             }
+            writer.Close();
         }
 
-      
         private void ShowTable(int vertex, int bfsNum)
         {
             writer.Write($"   {vertex}   |  {bfsNum}  | ");
@@ -108,7 +106,6 @@ namespace LAB_3
                         PrintList(queue.ToList());
                     }
                 }
-
                 writer.Write($"   {start + humanIndex}   |  -  | ");
                 PrintList(queue.ToList());
                 start = queue.Dequeue() - humanIndex;
@@ -145,7 +142,6 @@ namespace LAB_3
                         DoWork(vertex);
                     }
                 }
-
                 if (stack.Count() == 0) return;
                 int stackHead = stack.Pop();
                 writer.Write($"   {stackHead}   |  -  | ");

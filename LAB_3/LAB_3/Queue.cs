@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-
 namespace LAB_3
 {
     class Queue
@@ -26,6 +25,5 @@ namespace LAB_3
         public int Count() => queue.Count;
 
         public List<int> ToList() => queue;
-
     }
 }

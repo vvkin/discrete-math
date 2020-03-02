@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Collections.Generic;
-using System;
 
 namespace LAB_3
 {
@@ -16,7 +15,7 @@ namespace LAB_3
         private (int, int) ParseRow(string row)
         {
             string[] characters = row.Split(" ");
-            int[] numbers = Array.ConvertAll(characters, s => int.Parse(s));
+            int[] numbers = System.Array.ConvertAll(characters, s => int.Parse(s));
             return (numbers[0], numbers[1]);
 
         }

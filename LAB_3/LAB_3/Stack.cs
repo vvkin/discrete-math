@@ -22,6 +22,5 @@ namespace LAB_3
         public int Count() => stack.Count;
 
         public List<int> ToList() => stack;
-
     }
 }
