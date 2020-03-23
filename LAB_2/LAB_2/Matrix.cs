@@ -8,6 +8,7 @@ namespace LAB_2
         private readonly int sizeRows;
         private readonly int sizeColumns;
         private readonly int[,] matrix;
+		
         public Matrix(int n, int m)
         {
             sizeRows = (n >= 0) ? n : 0;
@@ -32,6 +33,7 @@ namespace LAB_2
         }
         public int GetRowSize() => sizeRows;
         public int getColSize() => sizeColumns;
+		
         public static Matrix operator *(Matrix A, Matrix B)
         {
             Matrix C = new Matrix(A.GetRowSize(), B.getColSize());
