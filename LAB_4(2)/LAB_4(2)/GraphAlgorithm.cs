@@ -40,7 +40,7 @@ namespace LAB_4_2_
                         DFS(vertex);
                     }
                 }
-                answer[--currentPlace] = start + 1;
+                answer[--currentPlace] = start;
             }
             return answer;
         }
@@ -58,9 +58,9 @@ namespace LAB_4_2_
 
             foreach(var vertex in sortedVertices)
             {
-                if (!visited.Contains(vertex - humanIndex))
+                if (!visited.Contains(vertex))
                 {
-                    DFS(vertex - humanIndex);
+                    DFS(vertex);
                 }
                 if (component.Count != 0)
                 {
@@ -90,8 +90,8 @@ namespace LAB_4_2_
         {
             List<List<int>> componetsList = GetConnectComponents();
 
-            writer.WriteLine($"The number of strongly connected components is equal to {componetsList.Count}");
-            writer.WriteLine("\nComponets : ");
+            writer.WriteLine($"\nThe number of strongly connected components is equal to {componetsList.Count}");
+            writer.WriteLine("Componets : ");
 
             foreach(var component in componetsList)
             {
