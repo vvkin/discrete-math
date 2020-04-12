@@ -64,6 +64,15 @@ bellman_result Algorithm::bellman(Graph& graph, int start)
 	return result;
 }
 
+bool Algorithm::constains_negative_cycles(std::list<edge> edges,int* dist) {
+	for (auto& el : edges) {
+		if (dist[el.end] > dist[el.start] + el.weight) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void Algorithm::print_path(int* path, int start, int end) {
 	auto current = end - 1;
 	std::list<int> way;
@@ -79,12 +88,37 @@ void Algorithm::print_path(int* path, int start, int end) {
 	}
 }
 
-
 void Algorithm::print_path_between(Graph& graph, int start, int end){
 	auto result = bellman(graph, start - 1);
 
+	if (constains_negative_cycles(graph.adj_list, result.dist)) {
+		*out << "Graph contains negative cycles!\n";
+		return;
+	}
+	
 	if (result.dist[end - 1] != INF) {
 		*out << "The distance between vertices is equal to " << result.dist[end - 1] << '\n';
 		print_path(result.path, start, end);
+	}
+}
+
+void Algorithm::print_all_paths(Graph& graph, int start) {
+	auto result = bellman(graph, start - 1);
+
+	if (constains_negative_cycles(graph.adj_list, result.dist)) {
+		*out << "Graph contains negative cycles!\n";
+		return;
+	}
+
+	for (auto i = 0; i < graph.vertex_number; ++i) {
+		if (i != start - 1) {
+			if (result.dist[i] == INF) {
+				*out << "The distance between " << start << " and " << i + 1 << " is equal to infinity\n";
+			}
+			else {
+				*out << "The distance between " << start << " and " << i + 1 << " is equal to " 
+					 << result.dist[i] << '\n';
+			}
+		}
 	}
 }

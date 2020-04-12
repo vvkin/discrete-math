@@ -14,5 +14,5 @@ int main() {
 		graph.add_edge(start, end, weight);
 	}
 
-	Algorithm::print_path_between(graph, 1, 2);
+	Algorithm::print_all_paths(graph, 1);
 }

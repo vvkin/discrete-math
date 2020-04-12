@@ -12,6 +12,7 @@ private:
 	static std::ostream* out;
 	static bellman_result bellman(Graph&, int);
 	static void print_path(int*, int, int);
+	static bool constains_negative_cycles(std::list<edge>, int*);
 	
 	template<typename T> 
 	static T** fill_matrix(int, int, T);
@@ -21,6 +22,6 @@ private:
 	static T** create_matrix(int, int, T);
 public:
 	static void print_path_between(Graph&, int, int);
-
+	static void print_all_paths(Graph&, int);
 };
 
