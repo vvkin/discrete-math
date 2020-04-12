@@ -38,6 +38,7 @@ public:
 	Graph(int);
 	Graph(Graph&);
 	~Graph();
+	void rebuilt();
 	void add_edge(int, int, int);
 	int** get_adj_matrix();
 	bool contains_negative_edges();

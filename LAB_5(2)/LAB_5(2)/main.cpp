@@ -13,6 +13,4 @@ int main() {
 		file_handler >> start >> end >> weight;
 		graph.add_edge(start, end, weight);
 	}
-
-	Algorithm::print_all_paths(graph, 1);
 }

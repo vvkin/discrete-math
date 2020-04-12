@@ -28,6 +28,19 @@ Graph::~Graph() {
 	delete[] adj_matrix;
 }
 
+void Graph::rebuilt(){
+	for (auto i = 0; i < vertex_number; ++i) {
+		dest_adj_list[i].clear();
+	}
+	for (auto& el : adj_list) {
+		if (el.start < vertex_number) {
+			dest_adj_list[el.start].push_back(dest_edge(el.end, el.weight));
+			adj_matrix[el.start][el.end] = el.weight;
+		}
+	}
+}
+
+
 void Graph::add_edge(int start, int end, int weight) {
 	dest_adj_list[start - 1].push_back(dest_edge(end - 1, weight));
 	adj_list.push_back(edge(start - 1, end - 1, weight));
