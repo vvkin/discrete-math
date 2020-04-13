@@ -11,9 +11,9 @@ void Algorithm::print_matrix(T** matrix, const int row_size, const int col_size)
 	for (auto i = 0; i < row_size; ++i) {
 		for (auto j = 0; j < col_size; ++j) {
 			if (matrix[i][j] != INF)
-				* out << std::setw(4) << matrix[i][j] << " ";
+				* out << std::setw(4) << matrix[i][j];
 			else
-				*out << std::setw(4) << "? ";
+				*out << std::setw(4) << '?';
 		}
 		*out << '\n';
 	}
@@ -41,7 +41,7 @@ bellman_result Algorithm::bellman(Graph& graph, int start)
 	for (auto i = 0; i < n - 1; ++i) {
 		for (auto& edge_ : graph.adj_list) {
 			int u = edge_.start, v = edge_.end;
-			if (dist[v] > dist[u] + edge_.weight) {
+			if (dist[v] > dist[u] + edge_.weight && dist[u] != INF) {
 				dist[v] = dist[u] + edge_.weight;
 				prev[v] = u;
 			}
@@ -49,7 +49,7 @@ bellman_result Algorithm::bellman(Graph& graph, int start)
 	}
 
 	for (auto& el : graph.adj_list) {
-		if (dist[el.end] > dist[el.start] + el.weight) {
+		if (dist[el.end] != INF && dist[el.end] > dist[el.start] + el.weight) {
 			delete[] dist;
 			delete[] prev;
 			return result;
@@ -89,6 +89,9 @@ void Algorithm::print_path_between(Graph& graph, int start, int end){
 	if (result.dist[end - 1] != INF) {
 		*out << "The distance between vertices is equal to " << result.dist[end - 1] << '\n';
 		print_path(result.path, start, end);
+	}
+	else {
+		*out << "The path doesn`t exist!\n";
 	}
 	delete[] result.dist;
 	delete[] result.path;
@@ -214,8 +217,14 @@ void Algorithm::print_johnson_between(Graph& graph, int start, int end) {
 	}
 
 	const int n = graph.vertex_number;
-	*out << "The distance between vertices is equal to " << result.dist_m[start - 1][end - 1] << '\n';
-	print_path(result.path_m[start - 1], start, end);
+	if (result.dist_m[start - 1][end - 1] != INF){
+		*out << "The distance between vertices is equal to " << result.dist_m[start - 1][end - 1] << '\n';
+		print_path(result.path_m[start - 1], start, end);
+	}
+	else {
+		*out << "The path doesn`t exist!\n";
+	}
+	
 
 	delete_matrix(result.dist_m, n);
 	delete_matrix(result.path_m, n);
