@@ -13,4 +13,6 @@ int main() {
 		file_handler >> start >> end >> weight;
 		graph.add_edge(start, end, weight);
 	}
+	file_handler.close();
+	Algorithm::start_menu(graph);
 }

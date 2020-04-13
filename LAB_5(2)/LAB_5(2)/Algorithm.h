@@ -25,14 +25,21 @@ private:
 	static dijkstra_result dijkstra(Graph&, int);
 	static johnson_result johnson(Graph&);
 
+	static void print_path_between(Graph&, int, int);
+	static void print_all_paths(Graph&, int);
+	static void print_johnson_between(Graph&, int, int);
+	static void print_all_johnson_paths(Graph&);
+
 	template<typename T>
 	static void delete_matrix(T**, const int);
 	template<typename T>
 	static void print_matrix(T**, const int, const int);
+
+	static void do_work(Graph&);
+	static void show_menu();
+
+	
 public:
-	static void print_path_between(Graph&, int, int);
-	static void print_all_paths(Graph&, int);
-	static void print_johnson_between(Graph&, int, int);
-	static void print_all_johnson_paths(Graph&, int);
+	static void start_menu(Graph&);
 };
 

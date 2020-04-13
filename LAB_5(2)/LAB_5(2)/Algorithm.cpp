@@ -2,9 +2,9 @@
 #include <iostream>
 #include <iomanip>
 #include <queue>
+#include <fstream>
 
-
-std::ostream* Algorithm::out = &std::cout;
+std::ostream* Algorithm::out;
 
 template<typename T>
 void Algorithm::print_matrix(T** matrix, const int row_size, const int col_size) {
@@ -113,6 +113,8 @@ void Algorithm::print_all_paths(Graph& graph, int start) {
 			}
 		}
 	}
+	delete[] result.dist;
+	delete[] result.path;
 }
 
 dijkstra_result Algorithm::dijkstra(Graph& graph, int start)
@@ -130,6 +132,7 @@ dijkstra_result Algorithm::dijkstra(Graph& graph, int start)
 
 	for (auto i = 0; i < graph.vertex_number; ++i) {
 		dist[i] = INF;
+		path[i] = -1;
 	}
 
 	que.push(dest_edge(start, 0));
@@ -141,6 +144,7 @@ dijkstra_result Algorithm::dijkstra(Graph& graph, int start)
 		for (auto& el : graph.dest_adj_list[u]) {
 			if (dist[el.destination] > dist[u] + el.weight) {
 				dist[el.destination] = dist[u] + el.weight;
+				path[el.destination] = u;
 				que.push(el);
 			}
 		}
@@ -211,21 +215,89 @@ void Algorithm::print_johnson_between(Graph& graph, int start, int end) {
 
 	const int n = graph.vertex_number;
 	*out << "The distance between vertices is equal to " << result.dist_m[start - 1][end - 1] << '\n';
-	print_path(result.dist_m[start - 1], start, end);
+	print_path(result.path_m[start - 1], start, end);
 
 	delete_matrix(result.dist_m, n);
 	delete_matrix(result.path_m, n);
 }
 
-void Algorithm::print_all_johnson_paths(Graph& graph, int start){
+void Algorithm::print_all_johnson_paths(Graph& graph){
 	auto result = johnson(graph);
 	if (result.dist_m == nullptr) {
 		*out << "Graph contains negative cycle!\n";
+		return;
 	}
 	const int n = graph.vertex_number;
 
 	*out << "Distance matrix : \n";
 	print_matrix(result.dist_m, n, n);
-	*out << "History matrix : \n";
-	print_matrix(result.path_m, n, n);
+	
+	delete_matrix(result.path_m, n);
+	delete_matrix(result.dist_m, n);
 }
+
+void Algorithm::do_work(Graph& graph){
+	int input = -1, start, end;
+
+	while (input < 1 || input > 4) {
+		std::cout << "\nType your choice : ";
+		std::cin >> input;
+	}
+	switch (input)
+	{
+	case 1:
+		std::cout << "Print vertices to find path for : ";
+		std::cin >> start >> end;
+		print_path_between(graph, start, end);
+		break;
+	case 2:
+		std::cout << "Type the start vertex : ";
+		std::cin >> start;
+		print_all_paths(graph, start);
+		break;
+	case 3:
+		std::cout << "Type vertices to find path for : ";
+		std::cin >> start >> end;
+		print_johnson_between(graph, start, end);	
+		break;
+	case 4:
+		print_all_johnson_paths(graph);
+		break;
+	}
+}
+
+void Algorithm::show_menu() {
+	std::cout << "Choose one of the next options : \n";
+	std::cout << "1 - Find shortest path between two vertices with Ford - Bellman algorithm\n"
+		<< "2 - Find shortest paths from source to other vertices with Ford - Bellman algorithm\n"
+		<< "3 - Find shorted path between vertices with Johnson algorithm\n"
+		<< "4 - Show shortest paths between all vertices with Johnson - Algorithm algorithm\n";
+}
+
+void Algorithm::start_menu(Graph& graph) {
+	std::cout << "Do you want to work with file or console?(file/console)\n";
+	std::string answer;
+	std::cin >> answer;
+	std::ofstream file;
+
+	if (answer == "file") {
+		std::cout << "Type the name of the file :\n";
+		std::string file_name;
+		std::cin >> file_name;
+		file.open(file_name, std::ios::out);
+		out = &file;
+	}
+	else out = &std::cout;
+
+	while (answer != "exit") {
+		show_menu();
+		do_work(graph);
+		*out << "\n";
+		std::cout << "If you to exit print \'exit\' else press any key ...\n";
+		std::cin >> answer;
+		*out << '\n';
+	}
+	file.close();
+}
+
+
