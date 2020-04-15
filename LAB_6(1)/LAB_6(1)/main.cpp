@@ -107,22 +107,24 @@ int get_adjacent(int** matrix, const int v, const int size){
 
 int get_start(int* degrees, const int v_num){
 	for (auto i = 0; i < v_num; ++i)
-		if (degrees[i]) return i;
+		if (degrees[i] & 1) return i;
 }
 
 void print_euler(int** matrix, const int v_num) {
 	auto path = get_euler(matrix, v_num);
+	
 	if (path.size() == 0) {
 		cout << "Euler path and circuit don`t exist!\n";
 	}
-	else{
+	else {
 		if (path.front() == path.back())
 			cout << "Euler circuit : \n";
 		else
 			cout << "Euler path : \n";
 		print_vector(path);
-	}	
+	}
 }
+
 
 vector<int> get_euler(int** matrix, const int v_num){
 	auto* deg = get_degrees(matrix, v_num);
