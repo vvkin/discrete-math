@@ -179,7 +179,7 @@ vector<int> get_hamilton(int** matrix, const int v_num){
 	int start = 0;
 	vector<int> path;
 	
-	for (auto i = 0; i < v_num; ++i)
+	for (auto i = 0; i < v_num; ++i) 
 		visited[i] = false;
 
 	visited[start] = true;
