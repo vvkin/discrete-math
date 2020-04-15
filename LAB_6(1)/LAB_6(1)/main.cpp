@@ -113,7 +113,7 @@ int get_start(int* degrees, const int v_num){
 void print_euler(int** matrix, const int v_num) {
 	auto path = get_euler(matrix, v_num);
 	if (path.size() == 0) {
-		cout << "Euler path and circuit not exist!\n";
+		cout << "Euler path and circuit don`t exist!\n";
 	}
 	else{
 		if (path.front() == path.back())
@@ -123,7 +123,6 @@ void print_euler(int** matrix, const int v_num) {
 		print_vector(path);
 	}	
 }
-
 
 vector<int> get_euler(int** matrix, const int v_num){
 	auto* deg = get_degrees(matrix, v_num);
@@ -164,14 +163,14 @@ list<int>* get_adj_list(int** matrix, const int size) {
 	return adj_list;
 }
 
-
 vector<int> try_to_make_cycle(vector<int> path, list<int>* adj_list) {
 	for (auto w : adj_list[path.back() - 1]) {
 		if (w == path.front() - 1) {
 			path.push_back(w + 1);
-			return path;
+			break;
 		}
 	}
+	return path;
 }
 
 vector<int> get_hamilton(int** matrix, const int v_num){
@@ -186,7 +185,7 @@ vector<int> get_hamilton(int** matrix, const int v_num){
 	visited[start] = true;
 	path.push_back(start + 1);
 
-	while (path.size() != 0 && path.size() < v_num) {
+	while (path.size() != 0 && path.size() != v_num) {
 		start = path.back() - 1;
 		for (auto w : adj_list[start]) {
 			if (!visited[w]) {
@@ -202,7 +201,6 @@ vector<int> get_hamilton(int** matrix, const int v_num){
 
 	if (path.size()) 
 		path = try_to_make_cycle(path, adj_list);
-	
 	delete[] visited;
 	delete[] adj_list;
 	return path;
@@ -211,7 +209,7 @@ vector<int> get_hamilton(int** matrix, const int v_num){
 void print_hamilton(int** matrix, const int size){
 	auto path = get_hamilton(matrix, size);
 	if (!path.size()) {
-		cout << "Hamiltonian path doesn`t exist!\n";
+		cout << "Hamiltonian path and cycle don`t exist!\n";
 	}
 	else {
 		if (path.front() == path.back()) {
