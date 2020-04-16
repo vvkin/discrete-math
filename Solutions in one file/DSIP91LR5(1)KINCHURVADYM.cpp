@@ -425,11 +425,3 @@ void Algorithm::do_work(Graph& graph) {
 		break;
 	}
 }
-
-
-
-
-
-
-
-

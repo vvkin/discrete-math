@@ -484,3 +484,8 @@ void Algorithm::start_menu(Graph& graph) {
 	}
 	file.close();
 }
+
+
+
+
+
