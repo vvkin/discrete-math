@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 #include <iomanip>
+#include <algorithm>
+#include <regex>
 using namespace std;
 
 void get_input(const char*, list<int>*&, int&);
@@ -13,19 +15,21 @@ int* get_prufer_code(list<int>*, int);
 int get_pointer(int*, int, int);
 int* get_degrees(list<int>*, int);
 void print_array(int*, int);
+string read_code(const char*);
 vector<int> convert_to_int(string);
 int* fill_array(int, int);
 int** fill_matrix(int, int);
 int* degree_from_code(vector<int>, int);
-int** decode_tree(string);
+int** decode_tree(vector<int>);
+void print_matrix(int**, int);
+void show_menu();
+void work_with_answer(int);
+void process_menu();
+void delete_matrix(int**, int);
 void print_matrix(int**, int);
 
 int main() {
-	list<int>* adj_list = nullptr;
-	int vertex_num;
-	get_input("input.txt", adj_list, vertex_num);
-	print_array(get_prufer_code(adj_list, vertex_num), vertex_num - 2);
-	print_matrix(decode_tree("1 5 2 6 6 2 1 3"), 10);
+	process_menu();
 }
 
 void get_input(const char* file_name, list<int>*& adj_l, int& v_num) {
@@ -109,6 +113,7 @@ vector<int> convert_to_int(string str) {
 	string temp;
 	for (auto i = 0; i < str.length(); ++i) {
 		if (str[i] == ' ') {
+			regex_replace(temp, regex("^ +"), "");
 			arr_int.push_back(stoi(temp) - 1);
 			temp = "";
 		}
@@ -135,6 +140,14 @@ int** fill_matrix(const int size, const int filler) {
 	return matrix;
 }
 
+string read_code(const char* file_name) {
+	ifstream file_handler(file_name);
+	string code;
+	getline(file_handler, code);
+	file_handler.close();
+	return code;
+}
+
 int* degree_from_code(vector<int> prufer_code, int v_num) {
 	auto* degree = fill_array(v_num, 1);
 	for (auto i = 0; i < v_num - 2; ++i)
@@ -142,8 +155,7 @@ int* degree_from_code(vector<int> prufer_code, int v_num) {
 	return degree;
 }
 
-int** decode_tree(string code) {
-	auto prufer_code = convert_to_int(code);
+int** decode_tree(vector<int> prufer_code) {
 	auto const v_num = prufer_code.size() + 2;
 	auto* degree = degree_from_code(prufer_code, v_num);
 	int** adj_m = fill_matrix(v_num, 0);
@@ -176,5 +188,49 @@ void print_matrix(int** matrix, int size) {
 			cout << setw(3) << matrix[i][j];
 		cout << '\n';
 	}
+}
+
+void show_menu() { 
+	cout << "Choose one of the following : \n"
+		 << "1 - find prufer code from tree\n"
+		 << "2 - decode tree from prufer code\n";
+}
+
+void work_with_answer(int answer) {
+	if (answer == 1) {
+		list<int>* adj_l = nullptr;
+		int v_num;
+		get_input("input.txt", adj_l, v_num);
+		auto* prufer_code = get_prufer_code(adj_l, v_num);
+		cout << "Prufer code : \n";
+		print_array(prufer_code, v_num - 2);
+		delete[] prufer_code;
+	}
+	else {
+		auto code = read_code("input.txt");
+		auto int_code = convert_to_int(code);
+		auto const v_num = int_code.size() + 2;
+		auto** adj_m = decode_tree(int_code);
+		cout << "Decoded adjancency matrix : \n";
+		print_matrix(adj_m, v_num);
+		delete_matrix(adj_m, v_num);
+	}
+}
+
+void process_menu() {
+	int answer = -1;
+	show_menu();
+	while (answer < 1 || answer > 2) {
+		cout << "Type your choice : ";
+		cin >> answer;
+		cout << '\n';
+	}
+	work_with_answer(answer);
+}
+
+void delete_matrix(int** matrix, int row_size) {
+	for (auto i = 0; i < row_size; ++i)
+		delete[] matrix[i];
+	delete[] matrix;
 }
 
