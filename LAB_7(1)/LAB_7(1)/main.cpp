@@ -113,7 +113,7 @@ vector<int> convert_to_int(string str) {
 	string temp;
 	for (auto i = 0; i < str.length(); ++i) {
 		if (str[i] == ' ') {
-			regex_replace(temp, regex("^ +"), "");
+			temp = regex_replace(temp, regex("^ +"), "");
 			arr_int.push_back(stoi(temp) - 1);
 			temp = "";
 		}
