@@ -15,7 +15,7 @@ vector<int> get_bipartition(list<int>*, int);
 two_parts get_two_parts(vector<int>);
 vector<int*> get_matches(list<int>*, vector<int>);
 void find_matches(vector<int*>&, list<int>*, vector<int>&, int&, int);
-char** get_template_matrix(list<int>*, vector<int>, vector<int>);
+char** get_template_matrix(list<int>*, two_parts);
 void print_match(int*, vector<int>, vector<int>, char**);
 void print_matrix(char**, int, int, vector<int>);
 void print_matches(list<int>*,int);
@@ -107,19 +107,16 @@ vector<int*> get_matches(list<int>* adj_l, vector<int> l_part) {
 }
 
 
-char** get_template_matrix(list<int>* adj_l, vector<int> l_part, vector<int> r_part) {
-	auto** t_matrix = new char*[/*l_part.size()*/ l_part.size() + r_part.size()];
-	for (auto i = 0; i < l_part.size(); ++i) {
-		t_matrix[i] = new char[/*r_part.size()*/ l_part.size() + r_part.size()];
+char** get_template_matrix(list<int>* adj_l, two_parts parts) {
+	auto** t_matrix = new char*[parts.first.size()];
+	for (auto i = 0; i < parts.first.size(); ++i) {
+		t_matrix[i] = new char[parts.second.size()];
 	}
-	for (auto i = 0; i < l_part.size(); ++i) {
-		for (auto j = 0; j < r_part.size(); ++j) {
-			t_matrix[i][j] = '*';
-		}
-	}
-	for (auto src : l_part) {
-		for (auto v : adj_l[src]) {
-			t_matrix[src][v] = '0';
+	for (auto i = 0; i < parts.first.size(); ++i) {
+		for (auto j = 0; j < parts.second.size(); ++j) {
+			auto el = find(adj_l[parts.first[i]].begin(), 
+				           adj_l[parts.first[i]].end(), parts.second[j]);
+			t_matrix[i][j] = (el != adj_l[parts.first[i]].end()) ? '0' : '*';
 		}
 	}
 	return t_matrix;
@@ -127,26 +124,29 @@ char** get_template_matrix(list<int>* adj_l, vector<int> l_part, vector<int> r_p
 
 void print_matrix(char** matrix, int row_num, int col_num, vector<int> l_part) {
 	for (auto i = 0; i < row_num; ++i) {
-		cout << setw(4) << l_part[i];
+		cout << setw(4) << l_part[i] + 1;
 		for (auto j = 0; j < col_num; ++j) {
 			cout << setw(4) << matrix[i][j];
+			matrix[i][j] = (matrix[i][j] != '*') ? '0' : '*';
 		}
-		cout << '\n';
+		cout << endl;
 	}
 }
 
 void print_vector(vector<int> vec) {
+	cout << "    ";
 	for (auto el : vec) {
-		cout << setw(4) << el;
+		cout << setw(4) << el + 1;
 	}
-	cout << '\n';
+	cout << endl;
 }
 
 
 void print_match(int* match, vector<int> l_part, vector<int> r_part, char** t_matrix) {
 	print_vector(r_part);
 	for (auto i = 0; i < l_part.size(); ++i) {
-		t_matrix[l_part[i]][r_part[i]] = '1';
+		auto index = *find(r_part.begin(), r_part.end(), match[i]);
+		t_matrix[i][index] = '1';
 	}
 	print_matrix(t_matrix, l_part.size(), r_part.size(), l_part);
 }
@@ -158,10 +158,11 @@ void print_matches(list<int>* adj_l, int v_num) {
 		return;
 	}
 	auto parts = get_two_parts(bipart);
-	auto** t_matrix = get_template_matrix(adj_l, parts.first, parts.second);
+	auto** t_matrix = get_template_matrix(adj_l, parts);
 	auto matching = get_matches(adj_l, parts.first);
 	for (auto i = 0; i < matching.size(); ++i) {
-		cout << "Matching " << i << " :\n";
+		cout << "Matching #" << i + 1 << ':' << endl;
 		print_match(matching[i], parts.first, parts.second, t_matrix);
+		cout << endl;
 	}
 }
