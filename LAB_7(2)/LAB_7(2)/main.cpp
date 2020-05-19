@@ -145,7 +145,7 @@ void print_vector(vector<int> vec) {
 void print_match(int* match, vector<int> l_part, vector<int> r_part, char** t_matrix) {
 	print_vector(r_part);
 	for (auto i = 0; i < l_part.size(); ++i) {
-		auto index = *find(r_part.begin(), r_part.end(), match[i]);
+		auto index = distance(r_part.begin(), find(r_part.begin(), r_part.end(), match[i]));
 		t_matrix[i][index] = '1';
 	}
 	print_matrix(t_matrix, l_part.size(), r_part.size(), l_part);
