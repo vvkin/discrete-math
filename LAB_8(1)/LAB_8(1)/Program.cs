@@ -10,7 +10,6 @@ namespace LAB_8_1_
         {
             var adjM = GetInput("input.txt");
             (var maxFlow, var newAdj) = ProcessFulkerson(adjM);
-
             PrintFulkerson(maxFlow, newAdj, adjM);
         }
 
@@ -22,6 +21,10 @@ namespace LAB_8_1_
                 var fisrstRow = sr.ReadLine().Split().ToList().ConvertAll(s => int.Parse(s));
                 (var vNum, var eNum) = (fisrstRow[0], fisrstRow[1]);
                 var adjM = new int[vNum, vNum];
+
+                /*for (var i = 0; i < vNum; ++i)
+                    for (var j = 0; j < vNum; ++j) 
+                        adjM[i, j] = -1;*/
                 for(var i = 0; i < eNum; ++i)
                 {
                     (var start, var end, var flow) = ParseRow(sr.ReadLine());
@@ -92,16 +95,13 @@ namespace LAB_8_1_
             {
                 var currentFlow = int.MaxValue;
                 var start = sick;
-
                 while(start != source)
                 {
                     currentFlow = System.Math.Min(currentFlow, changeAdjM[parent[start], start]);
                     start = parent[start];
                 }
-
                 maxFlow += currentFlow;
                 var v = sick;
-
                 while(v != source)
                 {
                     var u = parent[v];
@@ -116,7 +116,7 @@ namespace LAB_8_1_
         static void PrintFulkerson(int maxFlow, int[,]  newadjM, int [,] adjM)
         {
             System.Console.WriteLine($"Maximal flow is equal to {maxFlow}");
-            System.Console.WriteLine("Flow through each edge: \n");
+            System.Console.WriteLine("Flow through each edge:");
             for(var i = 0; i < adjM.GetLength(0); ++i)
             {
                 for(var j = 0; j < adjM.GetLength(0); ++j)
@@ -125,7 +125,7 @@ namespace LAB_8_1_
                     {
                         var flow = (newadjM[i, j] < 0) ? adjM[i, j]
                                                        : adjM[i, j] - newadjM[i, j];
-                        System.Console.WriteLine($"({i + 1}, {j + 1}) : {flow}");
+                        System.Console.WriteLine($"f({i + 1}, {j + 1}) = {flow}");
                     }
                 }
             }

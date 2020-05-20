@@ -1,6 +1,3 @@
-# Modules
-from copy import copy
-
 # Constants
 INF = float('inf')
 
