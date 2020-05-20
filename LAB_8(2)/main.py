@@ -4,17 +4,24 @@ from copy import copy
 # Constants
 INF = float('inf')
 
+def get_matrix_sum(matrix):
+    return sum([val for row in matrix for val in row if val != INF]) // 2
+
 # Print MST
 def print_min_tree(adj_m):
     to_print = process_prim(adj_m)
     if to_print is None:
           return print("Minimal spanning tree doesn't exist!")
-    print("Minimal spanning tree: ")
-    for row in to_print:
-        for val in row:
-            out_val = val if val != INF else '\u221e'
+    print("Minimal spanning tree:\n")
+    for i in range(len(to_print)):
+        for j in range(len(to_print)):
+            if i != j:
+                out_val = to_print[i][j] if to_print[i][j] != INF else '\u221e'
+            else:
+                out_val = 0
             print(f'{out_val:>5}', end = '')
         print()
+    print(f"\nTotal tree cost is equal to {get_matrix_sum(to_print)}")
 
 # Prim algorithm    
 def process_prim(adj_m):
