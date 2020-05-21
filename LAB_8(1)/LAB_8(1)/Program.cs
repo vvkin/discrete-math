@@ -22,9 +22,9 @@ namespace LAB_8_1_
                 (var vNum, var eNum) = (fisrstRow[0], fisrstRow[1]);
                 var adjM = new int[vNum, vNum];
 
-                /*for (var i = 0; i < vNum; ++i)
+                for (var i = 0; i < vNum; ++i)
                     for (var j = 0; j < vNum; ++j) 
-                        adjM[i, j] = -1;*/
+                        adjM[i, j] = -1;
                 for(var i = 0; i < eNum; ++i)
                 {
                     (var start, var end, var flow) = ParseRow(sr.ReadLine());
@@ -121,7 +121,7 @@ namespace LAB_8_1_
             {
                 for(var j = 0; j < adjM.GetLength(0); ++j)
                 {
-                    if (adjM[i, j] != 0)
+                    if (adjM[i, j] != -1)
                     {
                         var flow = (newadjM[i, j] < 0) ? adjM[i, j]
                                                        : adjM[i, j] - newadjM[i, j];
